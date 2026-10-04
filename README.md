@@ -105,9 +105,12 @@ Required environment variables:
 POSTGRES_DB=kingdom_concepts
 POSTGRES_USER=kingdom_concepts
 POSTGRES_PASSWORD=<strong-production-password>
+PGDATA=/var/lib/postgresql/data/pgdata
 ```
 
 Do not hardcode production secrets in this repository. Set `POSTGRES_PASSWORD` in Bunny Magic Containers as an environment variable or secret.
+
+`PGDATA` points Postgres at a subdirectory inside the mounted volume. This avoids initialization failures on providers that create system folders such as `lost+found` at the volume root.
 
 Health check:
 
