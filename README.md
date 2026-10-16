@@ -169,3 +169,17 @@ FROM kingdom_archive.match_document_chunks(
   '{}'::jsonb
 );
 ```
+
+## TLS support
+
+See [the TLS rollout guide](docs/TLS.md) for certificate provisioning, Bunny configuration,
+verified client connections, strict-mode cutover and rollback. `POSTGRES_TLS_MODE=off`
+retains current local behavior; use `on` for a controlled client migration and `require`
+to reject unencrypted TCP. TLS is configured in this image, not by adding a CDN endpoint.
+
+For a separate disposable local test (no existing service/volume changes):
+
+```sh
+docker build -t kingdom-concepts-postgres:tls-test .
+bash tests/tls-smoke.sh
+```

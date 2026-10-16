@@ -8,3 +8,13 @@ docker-compose*.yml
 node_modules
 tmp
 .DS_Store
+
+.env.*
+secrets/
+certs/
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+tests/

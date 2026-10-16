@@ -1,0 +1,16 @@
+# Explicit overlay: docker compose -f docker-compose.yml -f docker-compose.tls.yml up --build
+# TLS files are local secret inputs, never image content. Existing database volume is unchanged.
+services:
+  postgres:
+    environment:
+      POSTGRES_TLS_MODE: require
+      POSTGRES_TLS_CERT_FILE: /run/secrets/postgres_tls_cert
+      POSTGRES_TLS_KEY_FILE: /run/secrets/postgres_tls_key
+    secrets:
+      - postgres_tls_cert
+      - postgres_tls_key
+secrets:
+  postgres_tls_cert:
+    file: ${POSTGRES_TLS_CERT_PATH:?Set the path to your server certificate chain}
+  postgres_tls_key:
+    file: ${POSTGRES_TLS_KEY_PATH:?Set the path to your server private key}

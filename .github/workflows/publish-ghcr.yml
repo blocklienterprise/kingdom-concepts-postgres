@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - codex/postgres-tls-support
   workflow_dispatch:
 
 permissions:
@@ -31,13 +32,23 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set image tags
+        id: image-tags
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
+            echo "channel=${IMAGE_NAME}:latest" >> "$GITHUB_OUTPUT"
+          else
+            echo "channel=${IMAGE_NAME}:tls-preview" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: |
-            ${{ env.IMAGE_NAME }}:latest
+            ${{ steps.image-tags.outputs.channel }}
             ${{ env.IMAGE_NAME }}:${{ github.sha }}
           labels: |
             org.opencontainers.image.title=kingdom-concepts-postgres
